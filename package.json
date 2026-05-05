@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "db:up": "sudo docker compose -f ./src/mcp-drift/docker-compose.yml up -d"
+    "db:up": "sudo docker compose -f docker-compose.yml up -d",
+    "drift:start": "tsx --watch src/mcp-drift/index.ts",
+    "drift:once": "tsx src/mcp-drift/index.ts"
   },
   "repository": {
     "type": "git",
@@ -23,8 +25,11 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
+    "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
+    "@prisma/config": "^7.8.0",
     "dotenv": "^17.4.2",
-    "pg": "^8.20.0"
+    "pg": "^8.20.0",
+    "zod": "^4.4.3"
   }
 }
