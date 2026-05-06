@@ -1,15 +1,7 @@
 import { prisma } from "../db";
 import type { ToolDef } from "../types/types";
 import type { Prisma } from "@prisma/client";
-import { z } from "zod";
-
-const updateCarSchema = z.object({
-  id: z.number(),
-  make: z.string().optional(),
-  model: z.string().optional(),
-  horsepower: z.number().optional(),
-  engine: z.string().optional(),
-});
+import { updateCarSchema } from "./schemas";
 
 export const updateCarTool: ToolDef = {
   name: "update_car",

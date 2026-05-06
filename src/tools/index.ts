@@ -1,5 +1,6 @@
 import { createPilotTool } from "./createPilot";
 import { createEventTool } from "./createEvent";
+import { addCarToPilotTool } from "./addCarToPilot";
 import { deleteCarTool } from "./deleteCar";
 import { deleteEventTool } from "./deleteEvent";
 import { deletePilotTool } from "./deletePilot";
@@ -15,6 +16,7 @@ import type { ToolDef } from "../types/types";
 export const toolsRegistry: Record<string, ToolDef> = {
   [createPilotTool.name]: createPilotTool,
   [createEventTool.name]: createEventTool,
+  [addCarToPilotTool.name]: addCarToPilotTool,
   [updatePilotTool.name]: updatePilotTool,
   [updateEventTool.name]: updateEventTool,
   [deletePilotTool.name]: deletePilotTool,

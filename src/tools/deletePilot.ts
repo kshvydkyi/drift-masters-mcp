@@ -1,10 +1,6 @@
 import { prisma } from "../db";
 import type { ToolDef } from "../types/types";
-import { z } from "zod";
-
-const deletePilotSchema = z.object({
-  id: z.number(),
-});
+import { deletePilotSchema } from "./schemas";
 
 export const deletePilotTool: ToolDef = {
   name: "delete_pilot",

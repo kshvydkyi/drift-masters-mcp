@@ -10,6 +10,8 @@ export default defineConfig({
     seed: "prisma generate && tsx prisma/seed.ts",
   },
   datasource: {
-    url: "postgresql://drift_admin:change_me_strong_password@localhost:5432/drift_masters?schema=public",
+    url:
+      process.env.DATABASE_URL ??
+      "postgresql://drift_admin:change_me_strong_password@localhost:5432/drift_masters?schema=public",
   },
 });

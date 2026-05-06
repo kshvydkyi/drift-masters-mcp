@@ -4,10 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:setup": "dotenv -e .env.test -- npx prisma db push",
+    "test": "npm run test:setup && jest",
     "db:up": "sudo docker compose -f docker-compose.yml up -d",
-    "drift:start": "tsx --watch src/mcp-drift/index.ts",
-    "drift:once": "tsx src/mcp-drift/index.ts"
+    "db:down": "sudo docker compose -f docker-compose.yml down --remove-orphans",
+    "db:reset": "sudo docker rm -f mcp-postgres mcp-postgres-test 2>/dev/null || true; npm run db:down; npm run db:up",
+    "drift:start": "tsx --watch src/index.ts",
+    "drift:once": "tsx src/index.ts"
   },
   "repository": {
     "type": "git",
@@ -18,10 +21,14 @@
   "license": "ISC",
   "type": "module",
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "@types/node": "^25.6.0",
     "@types/pg": "^8.20.0",
+    "dotenv-cli": "^11.0.0",
+    "jest": "^30.3.0",
+    "ts-jest": "^29.4.9",
     "tsx": "^4.21.0",
-    "typescript": "^6.0.3"
+    "typescript": "^5.9.3"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",

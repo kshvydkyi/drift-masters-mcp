@@ -19,6 +19,30 @@ services:
     security_opt:
       - no-new-privileges:true
 
+  mcp-postgres-test:
+    image: postgres:17
+    container_name: mcp-postgres-test
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: drift_admin
+      POSTGRES_PASSWORD: change_me_strong_password
+      POSTGRES_DB: drift_masters_test
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_test_data:/var/lib/postgresql/data
+      - ./init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U drift_admin -d drift_masters_test"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    security_opt:
+      - no-new-privileges:true
+
 volumes:
   postgres_data:
     name: mcp_postgres_data
+  postgres_test_data:
+    name: mcp_postgres_test_data

@@ -10,7 +10,8 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "target": "esnext",
-    "types": ["node"],
+    "esModuleInterop": true,
+    "types": ["node", "jest"],
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],

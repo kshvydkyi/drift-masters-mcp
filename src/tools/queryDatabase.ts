@@ -1,13 +1,6 @@
 import { prisma } from "../db";
 import type { ToolDef } from "../types/types";
-import { z } from "zod";
-
-const allowedModels = ["pilot", "car", "event", "qualification", "battle"] as const;
-
-const queryDatabaseSchema = z.object({
-  model: z.enum(allowedModels),
-  queryArgs: z.unknown().optional(),
-});
+import { queryDatabaseSchema } from "./schemas";
 
 export const queryDatabaseTool: ToolDef = {
   name: "query_database",

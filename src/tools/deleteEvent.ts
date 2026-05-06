@@ -1,10 +1,6 @@
 import { prisma } from "../db";
 import type { ToolDef } from "../types/types";
-import { z } from "zod";
-
-const deleteEventSchema = z.object({
-  id: z.number(),
-});
+import { deleteEventSchema } from "./schemas";
 
 export const deleteEventTool: ToolDef = {
   name: "delete_event",

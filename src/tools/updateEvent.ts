@@ -1,15 +1,7 @@
 import { prisma } from "../db";
 import type { ToolDef } from "../types/types";
 import type { Prisma } from "@prisma/client";
-import { z } from "zod";
-
-const updateEventSchema = z.object({
-  id: z.number(),
-  name: z.string().optional(),
-  location: z.string().optional(),
-  date: z.string().datetime().optional(),
-  isCompleted: z.boolean().optional(),
-});
+import { updateEventSchema } from "./schemas";
 
 export const updateEventTool: ToolDef = {
   name: "update_event",

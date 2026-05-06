@@ -1,6 +1,6 @@
 import { prisma } from "../db";
 import type { ToolDef } from "../types/types";
-import { z } from "zod";
+import { generateBracketSchema } from "./schemas";
 
 type PilotBestResult = {
   pilotId: number;
@@ -8,10 +8,6 @@ type PilotBestResult = {
   lastName: string;
   bestScore: number;
 };
-
-const generateBracketSchema = z.object({
-  eventId: z.number(),
-});
 
 export const generateBracketTool: ToolDef = {
   name: "generate_bracket",

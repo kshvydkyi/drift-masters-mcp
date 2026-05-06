@@ -1,15 +1,6 @@
 import { prisma } from "../db";
 import type { ToolDef } from "../types/types";
-import { z } from "zod";
-
-const recordQualificationRunSchema = z.object({
-  pilotId: z.number(),
-  eventId: z.number(),
-  runNumber: z.union([z.literal(1), z.literal(2)]),
-  lineScore: z.number(),
-  angleScore: z.number(),
-  styleScore: z.number(),
-});
+import { recordQualificationSchema } from "./schemas";
 
 export const recordQualificationRunTool: ToolDef = {
   name: "record_qualification_run",
@@ -34,7 +25,7 @@ export const recordQualificationRunTool: ToolDef = {
     ],
   },
   handler: async (args) => {
-    const parsedArgs = recordQualificationRunSchema.parse(args);
+    const parsedArgs = recordQualificationSchema.parse(args);
     const totalScore =
       parsedArgs.lineScore + parsedArgs.angleScore + parsedArgs.styleScore;
 
