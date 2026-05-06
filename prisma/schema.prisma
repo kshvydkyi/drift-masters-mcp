@@ -1,0 +1,119 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider   = "prisma-client-js"
+  engineType = "binary"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Pilot {
+  id        Int     @id @default(autoincrement())
+  firstName String
+  lastName  String
+  nickname  String? // Например: "The Machine" (Джеймс Дин)
+  teamName  String?
+  country   String?
+
+  // Связи
+  cars           Car[] // У пилота может быть несколько машин
+  qualifications Qualification[]
+
+  // Парные заезды (связи для Lead и Chase позиций)
+  battlesAsLead  Battle[] @relation("LeadPilot")
+  battlesAsChase Battle[] @relation("ChasePilot")
+  battlesWon     Battle[] @relation("WinnerPilot")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("pilots")
+}
+
+// Модель Машины
+model Car {
+  id         Int     @id @default(autoincrement())
+  make       String // Nissan, BMW, Toyota
+  model      String // S15, E36, Supra
+  horsepower Int? // Лошадиные силы
+  engine     String? // 2JZ, 1JZ, LS, VR38
+
+  pilotId Int
+  pilot   Pilot @relation(fields: [pilotId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("cars")
+}
+
+// Модель Этапа/Ивента (Event)
+model Event {
+  id          Int      @id @default(autoincrement())
+  name        String // "Round 1: Riga", "Iron Drift King"
+  location    String
+  date        DateTime
+  isCompleted Boolean  @default(false)
+
+  // Связи
+  qualifications Qualification[]
+  battles        Battle[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("events")
+}
+
+// Квалификация (очки, которые пилот набирает перед парными)
+model Qualification {
+  id         Int   @id @default(autoincrement())
+  runNumber  Int // Номер попытки (1 или 2)
+  lineScore  Float // Линия (до 30 баллов)
+  angleScore Float // Угол (до 30 баллов)
+  styleScore Float // Стиль (до 40 баллов)
+  totalScore Float // Сумма
+
+  pilotId Int
+  pilot   Pilot @relation(fields: [pilotId], references: [id], onDelete: Cascade)
+
+  eventId Int
+  event   Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  // Пилот не может иметь две "Попытки №1" на одном ивенте
+  @@unique([pilotId, eventId, runNumber])
+  @@map("qualifications")
+}
+
+// Парные заезды (Тандемы)
+model Battle {
+  id      Int   @id @default(autoincrement())
+  eventId Int
+  event   Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  stage String // "Top 32", "Top 16", "Top 8", "Final"
+
+  // Кто едет первым, кто вторым
+  leadPilotId  Int
+  chasePilotId Int
+
+  leadPilot  Pilot @relation("LeadPilot", fields: [leadPilotId], references: [id])
+  chasePilot Pilot @relation("ChasePilot", fields: [chasePilotId], references: [id])
+
+  // Результат заезда (может быть null, если заезд еще не прошел)
+  isOMT    Boolean @default(false) // One More Time (перезаезд)
+  winnerId Int?
+  winner   Pilot?  @relation("WinnerPilot", fields: [winnerId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("battles")
+}
