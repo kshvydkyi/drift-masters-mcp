@@ -11,7 +11,6 @@ export default defineConfig({
   },
   datasource: {
     url:
-      process.env.DATABASE_URL ??
-      "postgresql://drift_admin:change_me_strong_password@localhost:5432/drift_masters?schema=public",
+      process.env.DATABASE_URL,
   },
 });
